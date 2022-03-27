@@ -1,10 +1,12 @@
 import React from 'react';
-import {SafeAreaView, Text} from 'react-native';
+import {SafeAreaView, Text, View} from 'react-native';
 
 function AllApplications({navigation}) {
   return (
-    <SafeAreaView>
-      <Text>Hii</Text>
+    <SafeAreaView style={{flex:1}}>
+      <View>
+        <Text>All Applications</Text>
+      </View>
     </SafeAreaView>
   );
 }
