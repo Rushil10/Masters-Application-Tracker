@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import {
   SafeAreaView,
   ScrollView,
@@ -19,6 +19,7 @@ import Profile from './src/screens/Profile';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import Icon from 'react-native-vector-icons/EvilIcons';
 import Icon2 from 'react-native-vector-icons/AntDesign';
+import SplashScreen from 'react-native-splash-screen';
 
 const Stack = createNativeStackNavigator();
 
@@ -69,6 +70,10 @@ function MyTabs() {
 
 function App() {
   const scheme = useColorScheme();
+
+  useEffect(() => {
+    SplashScreen.hide();
+  }, []);
 
   return (
     <NavigationContainer theme={scheme === 'dark' ? MyDarkTheme : DefaultTheme}>
