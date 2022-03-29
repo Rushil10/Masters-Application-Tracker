@@ -9,3 +9,5 @@ export const MyDarkTheme = {
         notification: '#9933FF',
     }
 }
+
+export const buttonBgColor = '#00AEAE'
