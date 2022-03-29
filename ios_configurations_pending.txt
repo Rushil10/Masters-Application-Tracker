@@ -1,1 +1,9 @@
 react-native-splash-screen : IOS setup is remaining
+firebase-app setup for ios : Google Login
+
+
+
+FOr Setup Of Sha-1
+Passsword:passsword
+cd android,cd app and then command :
+keytool -list -v -keystore firebase.keystore -alias fbalias -storepass password -keypass password
