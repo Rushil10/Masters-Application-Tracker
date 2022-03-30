@@ -1,5 +1,6 @@
 import React, {useEffect} from 'react';
 import {
+  AsyncStorage,
   SafeAreaView,
   ScrollView,
   StatusBar,
@@ -21,6 +22,10 @@ import Icon from 'react-native-vector-icons/EvilIcons';
 import Icon2 from 'react-native-vector-icons/AntDesign';
 import SplashScreen from 'react-native-splash-screen';
 import LoginScreen from './src/screens/LoginScreen';
+import store from './src/redux/store';
+import {getUserInfo, notYetLoggedIn} from './src/redux/actions/studentActions';
+import {useSelector} from 'react-redux';
+import {Provider} from 'react-redux';
 
 const Stack = createNativeStackNavigator();
 
@@ -72,20 +77,36 @@ function MyTabs() {
 function App() {
   const scheme = useColorScheme();
 
+  const checkLogin = async () => {
+    var token = await AsyncStorage.getItem('token');
+    console.log(token);
+    if (token) {
+      store.dispatch(getUserInfo(token));
+      setTimeout(() => {
+        SplashScreen.hide();
+      }, 1000);
+    } else {
+      SplashScreen.hide();
+    }
+  };
+
   useEffect(() => {
-    SplashScreen.hide();
+    checkLogin();
   }, []);
 
   return (
-    <NavigationContainer theme={scheme === 'dark' ? MyDarkTheme : DefaultTheme}>
-      <Stack.Navigator
-        screenOptions={{
-          headerShown: false,
-        }}>
-        <Stack.Screen name="AllTabs" component={MyTabs} />
-        <Stack.Screen name="Login" component={LoginScreen} />
-      </Stack.Navigator>
-    </NavigationContainer>
+    <Provider store={store}>
+      <NavigationContainer
+        theme={scheme === 'dark' ? MyDarkTheme : DefaultTheme}>
+        <Stack.Navigator
+          screenOptions={{
+            headerShown: false,
+          }}>
+          <Stack.Screen name="AllTabs" component={MyTabs} />
+          <Stack.Screen name="Login" component={LoginScreen} />
+        </Stack.Navigator>
+      </NavigationContainer>
+    </Provider>
   );
 }
 

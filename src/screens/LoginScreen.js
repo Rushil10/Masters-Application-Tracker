@@ -1,10 +1,11 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import {
   GoogleSignin,
   GoogleSigninButton,
   statusCodes,
 } from '@react-native-google-signin/google-signin';
 import {
+  ActivityIndicator,
   Dimensions,
   Image,
   SafeAreaView,
@@ -14,6 +15,7 @@ import {
 } from 'react-native';
 import store from '../redux/store';
 import {validateUser} from '../redux/actions/studentActions';
+import {useSelector} from 'react-redux';
 
 GoogleSignin.configure({
   webClientId:
@@ -24,6 +26,20 @@ const {height, width} = Dimensions.get('window');
 
 function LoginScreen({navigation}) {
   const [userInfo, setUserInfo] = useState({});
+  const [loading, setLoading] = useState(false);
+
+  const student = useSelector(state => state.student);
+
+  useEffect(() => {
+    console.log(student);
+    setLoading(student.loading);
+  }, [student.loading]);
+
+  useEffect(() => {
+    if (student.signedIn) {
+      navigation.pop();
+    }
+  }, [student.signedIn]);
 
   const signin = async () => {
     await GoogleSignin.signOut();
@@ -61,12 +77,18 @@ function LoginScreen({navigation}) {
         <View style={styles.textView}>
           <Text style={styles.textStyle}>University Applications Tracker</Text>
         </View>
-        <GoogleSigninButton
-          style={styles.siginButtonStyle}
-          size={GoogleSigninButton.Size.Wide}
-          color={GoogleSigninButton.Color.Dark}
-          onPress={signin}
-        />
+        {!loading ? (
+          <GoogleSigninButton
+            style={styles.siginButtonStyle}
+            size={GoogleSigninButton.Size.Wide}
+            color={GoogleSigninButton.Color.Dark}
+            onPress={signin}
+          />
+        ) : (
+          <View style={styles.container}>
+            <ActivityIndicator size={35} />
+          </View>
+        )}
       </View>
     </SafeAreaView>
   );

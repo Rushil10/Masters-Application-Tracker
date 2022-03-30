@@ -1,16 +1,25 @@
 import {useNavigation} from '@react-navigation/native';
 import React from 'react';
 import {TouchableOpacity, View, StyleSheet, Text} from 'react-native';
+import {useSelector} from 'react-redux';
 import {buttonBgColor} from '../styles/ThemeStyles';
 
 function AddApplicationButton() {
   const navigation = useNavigation();
 
+  const student = useSelector(state => state.student);
+
+  const onPressButton = () => {
+    if (student.signedIn) {
+      console.log(student);
+    } else {
+      navigation.push('Login');
+    }
+  };
+
   return (
     <View>
-      <TouchableOpacity
-        onPress={() => navigation.push('Login')}
-        style={styles.button}>
+      <TouchableOpacity onPress={onPressButton} style={styles.button}>
         <Text style={styles.buttonFontSize}>+</Text>
       </TouchableOpacity>
     </View>
