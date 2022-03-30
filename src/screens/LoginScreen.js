@@ -12,6 +12,8 @@ import {
   Text,
   View,
 } from 'react-native';
+import store from '../redux/store';
+import {validateUser} from '../redux/actions/studentActions';
 
 GoogleSignin.configure({
   webClientId:
@@ -29,6 +31,12 @@ function LoginScreen({navigation}) {
       await GoogleSignin.hasPlayServices();
       const userInfo = await GoogleSignin.signIn();
       console.log(userInfo);
+      var student = {
+        name: userInfo.user.name,
+        image: userInfo.user.photo,
+        email: userInfo.user.email,
+      };
+      store.dispatch(validateUser(student));
     } catch (error) {
       if (error.code === statusCodes.SIGN_IN_CANCELLED) {
         // user cancelled the login flow
@@ -51,7 +59,7 @@ function LoginScreen({navigation}) {
           style={styles.imgStyle}
         />
         <View style={styles.textView}>
-          <Text style={styles.textStyle}>University  Applications  Tracker</Text>
+          <Text style={styles.textStyle}>University Applications Tracker</Text>
         </View>
         <GoogleSigninButton
           style={styles.siginButtonStyle}

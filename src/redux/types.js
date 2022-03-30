@@ -1,0 +1,1 @@
+export const STORE_STUDENT = "STORE_STUDENT"

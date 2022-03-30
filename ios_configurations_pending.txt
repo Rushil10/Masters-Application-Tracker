@@ -1,6 +1,6 @@
 react-native-splash-screen : IOS setup is remaining
 firebase-app setup for ios : Google Login (https://rnfirebase.io/auth/usage)
-
+fonts for ios 
 
 
 FOr Setup Of Sha-1
