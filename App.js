@@ -63,6 +63,7 @@ function MyTabs() {
       <Tab.Screen
         options={{
           tabBarLabel: 'Profile',
+          headerShown: false,
           tabBarIcon: ({color, size}) => (
             <Icon2 name="profile" color={color} size={27} />
           ),
@@ -79,7 +80,6 @@ function App() {
 
   const checkLogin = async () => {
     var token = await AsyncStorage.getItem('token');
-    console.log(token);
     if (token) {
       store.dispatch(getUserInfo(token));
       setTimeout(() => {

@@ -11,3 +11,5 @@ export const MyDarkTheme = {
 }
 
 export const buttonBgColor = '#00AEAE'
+
+export const coolButtonBgColor = opacity => `rgba(30,144,255,${opacity})`
