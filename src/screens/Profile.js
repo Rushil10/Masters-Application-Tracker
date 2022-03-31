@@ -35,7 +35,7 @@ function Profile({navigation}) {
               borderRadius={11}
               title="My Scores"
               opacity={0.8}
-              onPress={() => console.log('Pressed')}
+              onPress={() => navigation.push('MyScores')}
             />
             <CoolButton
               marginHorizontal={15}

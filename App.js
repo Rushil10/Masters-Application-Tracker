@@ -26,6 +26,7 @@ import store from './src/redux/store';
 import {getUserInfo, notYetLoggedIn} from './src/redux/actions/studentActions';
 import {useSelector} from 'react-redux';
 import {Provider} from 'react-redux';
+import MyScores from './src/screens/MyScores';
 
 const Stack = createNativeStackNavigator();
 
@@ -104,6 +105,7 @@ function App() {
           }}>
           <Stack.Screen name="AllTabs" component={MyTabs} />
           <Stack.Screen name="Login" component={LoginScreen} />
+          <Stack.Screen name="MyScores" component={MyScores} />
         </Stack.Navigator>
       </NavigationContainer>
     </Provider>

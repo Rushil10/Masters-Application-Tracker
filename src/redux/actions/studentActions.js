@@ -22,3 +22,8 @@ export const getUserInfo = token => async dispatch => {
   var decoded_data = jwt_decode(token);
   dispatch({type: STORE_STUDENT, payload: decoded_data});
 };
+
+export const addMyScore = (type, score) => async dispatch => {
+  console.log(type2);
+  dispatch({type: type2, payload: score});
+};
