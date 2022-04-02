@@ -1,7 +1,13 @@
 import axios from 'axios';
 import url from '../../server/api.js';
 import jwt_decode from 'jwt-decode';
-import {SET_LOGIN_ERROR, STORE_STUDENT, STUDENT_LOADING} from '../types.js';
+import {
+  SET_LOGIN_ERROR,
+  STORE_STUDENT,
+  STUDENT_LOADING,
+  UPDATE_SCORE_ERROR,
+  UPDATE_SCORE_LOADING,
+} from '../types.js';
 import {AsyncStorage} from 'react-native';
 
 export const validateUser = student => async dispatch => {
@@ -23,7 +29,21 @@ export const getUserInfo = token => async dispatch => {
   dispatch({type: STORE_STUDENT, payload: decoded_data});
 };
 
-export const addMyScore = (type, score) => async dispatch => {
-  console.log(type2);
-  dispatch({type: type2, payload: score});
+export const addMyScore = (type, score, obj) => async dispatch => {
+  dispatch({type: UPDATE_SCORE_LOADING, payload: true});
+  var type2 = `UPDATE_${type}_SCORES`;
+  var token = await AsyncStorage.getItem('token');
+  var res = await axios.post(`${url}/student/update/score`, obj, {
+    headers: {
+      authorization: `Bearer ${token}`,
+    },
+  });
+  if (res.data) {
+    dispatch({type: type2, payload: score});
+    dispatch({type: UPDATE_SCORE_LOADING, payload: false});
+    await AsyncStorage.setItem('token', res.data.token);
+  } else {
+    var error = 'Could Not Update Scores !';
+    dispatch({type: UPDATE_SCORE_ERROR, payload: error});
+  }
 };

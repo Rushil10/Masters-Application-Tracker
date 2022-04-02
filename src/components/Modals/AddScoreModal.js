@@ -6,9 +6,11 @@ import {
   Text,
   Dimensions,
   TextInput,
+  ActivityIndicator,
 } from 'react-native';
 import Modal from 'react-native-modal';
 import {useSelector} from 'react-redux';
+import {getObject} from '../../Constants/scoreFunctions';
 import {addMyScore} from '../../redux/actions/studentActions';
 import studentReducer from '../../redux/reducers/studentReducer';
 import store from '../../redux/store';
@@ -20,13 +22,24 @@ function AddScoreModal({exam, isVisible, closeModal}) {
   const [score, setScore] = useState('');
   var student = useSelector(state => state.student);
   const [error, setError] = useState('');
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     setScore('');
     setError('');
   }, [exam.name]);
 
-  const addScore = () => {
+  useEffect(() => {
+    setLoading(student.scoreLoading);
+    if (!student.scoreLoading && student.scoreError.length > 0) {
+      setError(student.scoreError);
+    }
+  }, [student.scoreLoading]);
+
+  const addScore = async () => {
+    if (loading) {
+      return;
+    }
     if (score.length <= 0) {
       setError('Enter a Valid Score');
       return;
@@ -37,16 +50,25 @@ function AddScoreModal({exam, isVisible, closeModal}) {
       return;
     }
     setError('');
-    store.dispatch(addMyScore(exam.name, sc));
+    var obj = getObject(exam.name, sc);
+    await store.dispatch(addMyScore(exam.name, sc, obj));
     closeModal();
+  };
+
+  const goBack = () => {
+    if (loading) {
+      return;
+    } else {
+      closeModal();
+    }
   };
 
   return (
     <Modal
       isVisible={isVisible}
-      onBackdropPress={closeModal}
+      onBackdropPress={goBack}
       backdropOpacity={0.75}
-      onBackButtonPress={closeModal}>
+      onBackButtonPress={goBack}>
       <View style={styles.container}>
         <View style={styles.box(width)}>
           <Text style={styles.addButton}>
@@ -61,9 +83,15 @@ function AddScoreModal({exam, isVisible, closeModal}) {
             value={score}
           />
           {error.length > 0 && <Text style={styles.error}>{error}</Text>}
-          <TouchableOpacity onPress={addScore} style={styles.buttonStyle}>
-            <Text style={styles.add}>Add</Text>
-          </TouchableOpacity>
+          {!loading ? (
+            <TouchableOpacity onPress={addScore} style={styles.buttonStyle}>
+              <Text style={styles.add}>Add</Text>
+            </TouchableOpacity>
+          ) : (
+            <View>
+              <ActivityIndicator size={30} />
+            </View>
+          )}
         </View>
       </View>
     </Modal>
