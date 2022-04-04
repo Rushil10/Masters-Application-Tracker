@@ -44,7 +44,7 @@ function Profile({navigation}) {
               borderRadius={11}
               title="My Resume"
               opacity={0.8}
-              onPress={() => console.log('Pressed')}
+              onPress={() => navigation.push('Resumes')}
             />
             <CoolButton
               marginHorizontal={15}
