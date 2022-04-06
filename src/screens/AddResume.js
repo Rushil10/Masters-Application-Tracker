@@ -15,17 +15,7 @@ import axios from 'axios';
 import url from '../server/api';
 import storage from '@react-native-firebase/storage';
 import getPath from '@flyerhq/react-native-android-uri-path';
-
-function makeid(length) {
-  var result = '';
-  var characters =
-    'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
-  var charactersLength = characters.length;
-  for (var i = 0; i < length; i++) {
-    result += characters.charAt(Math.floor(Math.random() * charactersLength));
-  }
-  return result + '.pdf';
-}
+import {useSelector} from 'react-redux';
 
 function AddResume({navigation}) {
   const [fileData, setFileData] = useState(null);
@@ -34,6 +24,17 @@ function AddResume({navigation}) {
   const [storingInDb, setStoringInDb] = useState(false);
   const [name, setName] = useState('');
   const [link, setLink] = useState('');
+
+  const makeid = length => {
+    var result = '';
+    var characters =
+      'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+    var charactersLength = characters.length;
+    for (var i = 0; i < length; i++) {
+      result += characters.charAt(Math.floor(Math.random() * charactersLength));
+    }
+    return result + '_resume';
+  };
 
   const pickResume = async () => {
     var res = await DocumentPicker.pickSingle({type: 'application/pdf'});
