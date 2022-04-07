@@ -7,7 +7,7 @@ import {
   ActivityIndicator,
   TouchableOpacity,
 } from 'react-native';
-import {dodgerblue} from '../styles/ThemeStyles';
+import {buttonBgColor, dodgerblue} from '../styles/ThemeStyles';
 
 function ResumeCard({item}) {
   const navigation = useNavigation();
@@ -27,8 +27,16 @@ function ResumeCard({item}) {
 
 const styles = StyleSheet.create({
   text: {
-    fontSize: 20,
-    fontFamily: 'OpenSans-Regular',
+    fontSize: 21,
+    fontFamily: 'OpenSans-Italic',
+  },
+  link: {
+    fontSize: 16,
+    fontFamily: 'OpenSans-Bold',
+    color: dodgerblue,
+  },
+  flexRow: {
+    flexDirection: 'row',
   },
   container: {
     paddingHorizontal: 15,
@@ -36,7 +44,7 @@ const styles = StyleSheet.create({
     marginHorizontal: 9,
     marginVertical: 15,
     borderWidth: 1,
-    borderColor: dodgerblue,
+    borderColor: buttonBgColor,
     borderRadius: 9,
   },
 });

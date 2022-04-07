@@ -9,17 +9,18 @@ import {getResumeOfUser} from '../redux/actions/resumeActions';
 import store from '../redux/store';
 
 function AllResumes({navigation}) {
-  const [resumes, setResumes] = useState([]);
-  const [loading, setLoading] = useState(false);
-
   var studentResumes = useSelector(state => state.resume);
+  const [resumes, setResumes] = useState(studentResumes.resumes);
+  const [loading, setLoading] = useState(false);
 
   const onPressAdd = () => {
     navigation.push('AddResume');
   };
 
   useEffect(() => {
-    store.dispatch(getResumeOfUser());
+    if (studentResumes.resumes.length == 0) {
+      store.dispatch(getResumeOfUser());
+    }
   }, []);
 
   useEffect(() => {

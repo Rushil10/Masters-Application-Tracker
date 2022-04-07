@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import {
   SafeAreaView,
   Text,
@@ -16,6 +16,9 @@ import url from '../server/api';
 import storage from '@react-native-firebase/storage';
 import getPath from '@flyerhq/react-native-android-uri-path';
 import {useSelector} from 'react-redux';
+import ErrorModal from '../components/Modals/ErrorModal';
+import store from '../redux/store';
+import {getResumeOfUser} from '../redux/actions/resumeActions';
 
 function AddResume({navigation}) {
   const [fileData, setFileData] = useState(null);
@@ -24,6 +27,8 @@ function AddResume({navigation}) {
   const [storingInDb, setStoringInDb] = useState(false);
   const [name, setName] = useState('');
   const [link, setLink] = useState('');
+  const [errorText, setErrorText] = useState('');
+  const [showError, setShowError] = useState(false);
 
   const makeid = length => {
     var result = '';
@@ -38,17 +43,19 @@ function AddResume({navigation}) {
 
   const pickResume = async () => {
     var res = await DocumentPicker.pickSingle({type: 'application/pdf'});
-    console.log(res.size / 1000000);
     if (res.size / 1000000 > 2) {
+      showErrorModal('Maximum Size of PDF must be below 2mb');
       return;
     }
-    console.log(res.size / 1000000);
     setFileData(res);
-    console.log(res);
+  };
+
+  const showErrorModal = err => {
+    setErrorText(err);
+    setShowError(true);
   };
 
   const addToMongoDb = async (name, link) => {
-    console.log(name, link);
     setStoringInDb(true);
     var token = await AsyncStorage.getItem('token');
     var body = {
@@ -61,36 +68,49 @@ function AddResume({navigation}) {
         authorization: `Bearer ${token}`,
       },
     });
-    console.log(res.data);
+    if (!res.data) {
+      showErrorModal('Something went wrong while storing your Resume.');
+    } else {
+      store.dispatch(getResumeOfUser());
+    }
     setStoringInDb(false);
   };
 
   const uploadToFireBase = async () => {
-    if (!fileData) {
-      return;
-    }
-    if (name.length <= 4 || name.length >= 15) {
-      return;
-    }
     setStoringFile(true);
     var id = makeid(5);
     const reference = await storage().ref(id);
     const path = getPath(fileData.uri);
     const task = await reference.putFile(path);
-    console.log(path);
     const url = await storage().ref(id).getDownloadURL();
-    console.log(url);
     setStoringFile(false);
     return url;
   };
 
   const saveResume = async () => {
+    if (!fileData) {
+      showErrorModal('Choose a PDF');
+      return;
+    }
+    if (name.length <= 4 || name.length >= 15) {
+      showErrorModal('Nickname length must be between 4 and 15');
+      return;
+    }
     var url = await uploadToFireBase();
     await addToMongoDb(name, url);
   };
 
+  const closeModal = () => {
+    setShowError(false);
+  };
+
   return (
     <SafeAreaView style={styles.flex1}>
+      <ErrorModal
+        errorText={errorText}
+        closeModal={closeModal}
+        isVisible={showError}
+      />
       <View style={styles.container}>
         <TextInput
           value={name}

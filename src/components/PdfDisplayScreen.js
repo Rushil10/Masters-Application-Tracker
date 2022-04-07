@@ -6,7 +6,7 @@ export default function PDFExample({navigation, route}) {
   return (
     <View style={styles.container}>
       <Pdf
-        source={{uri: route.params.link}}
+        source={{uri: route.params.link, cache: true}}
         onLoadComplete={(numberOfPages, filePath) => {
           console.log(`Number of pages: ${numberOfPages}`);
         }}
