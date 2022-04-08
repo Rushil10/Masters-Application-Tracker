@@ -30,6 +30,7 @@ import MyScores from './src/screens/MyScores';
 import AllResumes from './src/screens/AllResumes';
 import AddResume from './src/screens/AddResume';
 import PDFExample from './src/components/PdfDisplayScreen';
+import AddApplication from './src/screens/AddApplication';
 
 const Stack = createNativeStackNavigator();
 
@@ -112,6 +113,7 @@ function App() {
           <Stack.Screen name="Resumes" component={AllResumes} />
           <Stack.Screen name="AddResume" component={AddResume} />
           <Stack.Screen name="PdfDisplay" component={PDFExample} />
+          <Stack.Screen name="AddApplication" component={AddApplication} />
         </Stack.Navigator>
       </NavigationContainer>
     </Provider>

@@ -3,13 +3,17 @@ import {SafeAreaView, Text, View, StyleSheet} from 'react-native';
 import AddApplicationButton from '../components/AddApplicationButton';
 
 function AllApplications({navigation}) {
+  const onPressAdd = () => {
+    navigation.push('AddApplication');
+  };
+
   return (
     <SafeAreaView style={{flex: 1}}>
       <View>
         <Text>All Applications</Text>
       </View>
       <View style={styles.addButtonStyle}>
-        <AddApplicationButton />
+        <AddApplicationButton onPress={onPressAdd} />
       </View>
     </SafeAreaView>
   );

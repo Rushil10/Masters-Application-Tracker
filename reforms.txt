@@ -1,0 +1,4 @@
+Share and delete button of resume
+error modla better
+screen header
+success adding resume dropdown and navigation
