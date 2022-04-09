@@ -1,16 +1,22 @@
 import React, {useState} from 'react';
 import {
+  Button,
   Dimensions,
   SafeAreaView,
   ScrollView,
   StyleSheet,
+  Text,
   TextInput,
+  TouchableOpacity,
   useColorScheme,
   View,
 } from 'react-native';
 import {Sae, Kohana, Hoshi} from 'react-native-textinput-effects';
 import FontAwesomeIcon from 'react-native-vector-icons/FontAwesome';
+import CoolButton from '../components/CoolButton';
 import CustomPicker from '../components/CustomPicker';
+import LoiPickerModal from '../components/Modals/LoiPickerModal';
+import ResumePickerModal from '../components/Modals/ResumePickerModal';
 import {buttonBgColor, dodgerblue} from '../styles/ThemeStyles';
 
 const {height, width} = Dimensions.get('window');
@@ -25,6 +31,10 @@ function AddApplication({navigation}) {
   const [scholarshipPercent, setScholarshipPercent] = useState('0');
   const [tag, setTag] = useState('');
   const [visibility, setVisibility] = useState('Public');
+  const [loiModal, setLoiModal] = useState(false);
+  const [loi, setLoi] = useState(null);
+  const [resumeModal, setResumeModal] = useState(false);
+  const [resume, setResume] = useState(null);
   const tags = ['Safety', 'Reach', 'Target'];
   const visibilities = ['Public', 'Private'];
   const onDegreeChange = degree => {
@@ -37,6 +47,22 @@ function AddApplication({navigation}) {
     setTag(tag);
   };
 
+  const openLoiModal = () => {
+    setLoiModal(true);
+  };
+
+  const closeLoiModal = () => {
+    setLoiModal(false);
+  };
+
+  const openResumeModal = () => {
+    setResumeModal(true);
+  };
+
+  const closeResumeModal = () => {
+    setResumeModal(false);
+  };
+
   const onVisibilityChange = visibility => {
     setVisibility(visibility);
   };
@@ -44,12 +70,32 @@ function AddApplication({navigation}) {
   const degrees = ['MS', 'MBA', 'MTech', 'ME'];
   const statuses = ['Applied', 'Rejected', 'Accepted'];
 
+  const pickLoi = loi => {
+    setLoi(loi);
+    closeLoiModal();
+  };
+
+  const pickResume = resume => {
+    setResume(resume);
+    closeResumeModal();
+  };
+
   var mode = useColorScheme();
 
   var color = mode === 'dark' ? 'white' : 'black';
 
   return (
     <SafeAreaView>
+      <LoiPickerModal
+        isVisible={loiModal}
+        closeModal={closeLoiModal}
+        onPick={pickLoi}
+      />
+      <ResumePickerModal
+        isVisible={resumeModal}
+        closeModal={closeResumeModal}
+        onPick={pickResume}
+      />
       <ScrollView style={styles.container}>
         <Sae
           label={'University Name'}
@@ -178,6 +224,53 @@ function AddApplication({navigation}) {
             />
           </View>
         )}
+        <View style={styles.marginBig}>
+          {loi ? (
+            <View>
+              <TouchableOpacity style={styles.loiStyle} onPress={openLoiModal}>
+                <Text style={styles.textStyle}>LOI Used : {loi.name}</Text>
+              </TouchableOpacity>
+            </View>
+          ) : (
+            <CoolButton
+              marginHorizontal={15}
+              marginVertical={10}
+              fontSize={18}
+              borderRadius={11}
+              title="LOI used for this College"
+              opacity={0.8}
+              onPress={openLoiModal}
+            />
+          )}
+          {resume ? (
+            <View>
+              <TouchableOpacity
+                style={styles.loiStyle}
+                onPress={openResumeModal}>
+                <Text style={styles.textStyle}>
+                  Resume Used : {resume.name}
+                </Text>
+              </TouchableOpacity>
+            </View>
+          ) : (
+            <CoolButton
+              marginHorizontal={15}
+              marginVertical={10}
+              fontSize={18}
+              borderRadius={11}
+              title="Resume used for this College"
+              opacity={0.8}
+              onPress={openResumeModal}
+            />
+          )}
+        </View>
+        <View style={styles.marginBig}>
+          <TouchableOpacity style={styles.buttonStyle}>
+            <Text style={[styles.textInputStyle, styles.textColor(color)]}>
+              Add Application
+            </Text>
+          </TouchableOpacity>
+        </View>
       </ScrollView>
     </SafeAreaView>
   );
@@ -187,6 +280,12 @@ const styles = StyleSheet.create({
   flex1: {
     flex: 1,
   },
+  buttonStyle: {
+    paddingVertical: 9,
+    alignItems: 'center',
+    backgroundColor: buttonBgColor,
+    borderRadius:15,
+  },
   courseNameStyle: {
     backgroundColor: 'blue',
   },
@@ -195,6 +294,15 @@ const styles = StyleSheet.create({
   },
   marginSmall: {
     marginTop: 15,
+  },
+  loiStyle: {
+    marginHorizontal: 15,
+    marginVertical: 10,
+    borderRadius: 9,
+    borderWidth: 1,
+    paddingHorizontal: 15,
+    paddingVertical: 9,
+    borderColor: buttonBgColor,
   },
   score: {
     fontSize: 16,
@@ -208,6 +316,10 @@ const styles = StyleSheet.create({
   },
   marginBig: {
     marginTop: 25,
+  },
+  textStyle: {
+    fontSize: 21,
+    fontFamily: 'OpenSans-Regular',
   },
   labelStyle: {
     paddingLeft: 25,

@@ -1,7 +1,7 @@
-import {RESUME_DATA, RESUME_ERROR, RESUME_LOADING} from '../types';
+import {LOI_DATA, LOI_ERROR, LOI_LOADING} from '../types';
 
 const initialState = {
-  resumes: [],
+  lois: [],
   loading: false,
   error: '',
   loaded: false,
@@ -9,20 +9,20 @@ const initialState = {
 
 export default function (state = initialState, action) {
   switch (action.type) {
-    case RESUME_DATA:
+    case LOI_DATA:
       return {
         ...state,
-        resumes: action.payload,
+        lois: action.payload,
         loading: false,
         error: '',
         loaded: true,
       };
-    case RESUME_LOADING:
+    case LOI_LOADING:
       return {
         ...state,
         loading: action.payload,
       };
-    case RESUME_ERROR:
+    case LOI_ERROR:
       return {
         ...state,
         error: action.payload,

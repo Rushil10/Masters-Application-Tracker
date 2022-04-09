@@ -1,5 +1,5 @@
-import React from 'react';
-import {StyleSheet, Dimensions, View} from 'react-native';
+import React, {useEffect} from 'react';
+import {StyleSheet, Dimensions, View, BackHandler} from 'react-native';
 import Pdf from 'react-native-pdf';
 
 export default function PDFExample({navigation, route}) {

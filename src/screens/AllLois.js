@@ -5,39 +5,40 @@ import AddApplicationButton from '../components/AddApplicationButton';
 import LoadingComponent from '../components/LoadingComponent';
 import NoData from '../components/NoData';
 import ResumeCard from '../components/ResumeCard';
+import {getLoiOfUser} from '../redux/actions/loiActions';
 import {getResumeOfUser} from '../redux/actions/resumeActions';
 import store from '../redux/store';
 
-function AllResumes({navigation}) {
-  var studentResumes = useSelector(state => state.resume);
-  const [resumes, setResumes] = useState(studentResumes.resumes);
+function AllLois({navigation}) {
+  var studentLois = useSelector(state => state.loi);
+  const [lois, setLois] = useState(studentLois.lois);
   const [loading, setLoading] = useState(false);
 
   const onPressAdd = () => {
-    navigation.push('AddResume');
+    navigation.push('AddLoi');
   };
 
   useEffect(() => {
-    if (!studentResumes.loaded) {
-      store.dispatch(getResumeOfUser());
+    if (!studentLois.loaded) {
+      store.dispatch(getLoiOfUser());
     }
   }, []);
 
   useEffect(() => {
-    setResumes(studentResumes.resumes);
-  }, [studentResumes.resumes]);
+    setLois(studentLois.lois);
+  }, [studentLois.lois]);
 
   useEffect(() => {
-    setLoading(studentResumes.loading);
-  }, [studentResumes.loading]);
+    setLoading(studentLois.loading);
+  }, [studentLois.loading]);
 
   return (
     <SafeAreaView style={{flex: 1}}>
       {loading ? (
-        <LoadingComponent displayText={'Loading Resumes'} />
-      ) : resumes.length == 0 ? (
+        <LoadingComponent displayText={'Loading Letter Of Intents'} />
+      ) : lois.length == 0 ? (
         <View style={styles.flex1}>
-          <NoData displayText="Add your resume which will get used for application to different universities" />
+          <NoData displayText="Add your different Letter Of Intents" />
           <View style={styles.addButtonStyle}>
             <AddApplicationButton onPress={onPressAdd} />
           </View>
@@ -45,7 +46,7 @@ function AllResumes({navigation}) {
       ) : (
         <View style={styles.flex1}>
           <FlatList
-            data={resumes}
+            data={lois}
             renderItem={({item, index}) => <ResumeCard item={item} />}
           />
           <View style={styles.addButtonStyle}>
@@ -68,4 +69,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default AllResumes;
+export default AllLois;

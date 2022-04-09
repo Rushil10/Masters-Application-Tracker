@@ -71,7 +71,7 @@ function Profile({navigation}) {
               borderRadius={11}
               title="Letter Of Intent"
               opacity={0.8}
-              onPress={() => console.log('Pressed')}
+              onPress={() => navigation.push('Lois')}
             />
             <CoolButton
               marginHorizontal={15}

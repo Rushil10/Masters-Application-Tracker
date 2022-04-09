@@ -31,6 +31,9 @@ import AllResumes from './src/screens/AllResumes';
 import AddResume from './src/screens/AddResume';
 import PDFExample from './src/components/PdfDisplayScreen';
 import AddApplication from './src/screens/AddApplication';
+import DummyScreen from './src/screens/DummyScreen';
+import AllLois from './src/screens/AllLois';
+import AddLoi from './src/screens/AddLoi';
 
 const Stack = createNativeStackNavigator();
 
@@ -76,6 +79,17 @@ function MyTabs() {
         name="Profile"
         component={Profile}
       />
+      {/* <Tab.Screen
+        options={{
+          tabBarLabel: 'Dummy',
+          headerShown: false,
+          tabBarIcon: ({color, size}) => (
+            <Icon2 name="profile" color={color} size={27} />
+          ),
+        }}
+        name="Dummt"
+        component={DummyScreen}
+      /> */}
     </Tab.Navigator>
   );
 }
@@ -112,6 +126,8 @@ function App() {
           <Stack.Screen name="MyScores" component={MyScores} />
           <Stack.Screen name="Resumes" component={AllResumes} />
           <Stack.Screen name="AddResume" component={AddResume} />
+          <Stack.Screen name="Lois" component={AllLois} />
+          <Stack.Screen name="AddLoi" component={AddLoi} />
           <Stack.Screen name="PdfDisplay" component={PDFExample} />
           <Stack.Screen name="AddApplication" component={AddApplication} />
         </Stack.Navigator>
