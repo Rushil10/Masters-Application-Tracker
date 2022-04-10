@@ -9,16 +9,16 @@ import {
   ActivityIndicator,
 } from 'react-native';
 import Modal from 'react-native-modal';
-import { buttonBgColor } from '../../styles/ThemeStyles';
+import {buttonBgColor} from '../../styles/ThemeStyles';
 
 const {height, width} = Dimensions.get('window');
 
-function ErrorModal({errorText, closeModal,isVisible}) {
+function ErrorModal({errorText, closeModal, isVisible, opacity}) {
   return (
     <Modal
       isVisible={isVisible}
       onBackdropPress={closeModal}
-      backdropOpacity={0.75}
+      backdropOpacity={opacity ? opacity : 0.75}
       onBackButtonPress={closeModal}>
       <View style={styles.container}>
         <View style={styles.box(width)}>

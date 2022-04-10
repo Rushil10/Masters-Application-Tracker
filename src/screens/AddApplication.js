@@ -1,5 +1,6 @@
 import React, {useState} from 'react';
 import {
+  AsyncStorage,
   Button,
   Dimensions,
   SafeAreaView,
@@ -18,18 +19,23 @@ import CustomPicker from '../components/CustomPicker';
 import LoiPickerModal from '../components/Modals/LoiPickerModal';
 import ResumePickerModal from '../components/Modals/ResumePickerModal';
 import {buttonBgColor, dodgerblue} from '../styles/ThemeStyles';
+import ErrorModal from '../components/Modals/ErrorModal';
+import axios from 'axios';
+import url from '../server/api';
+import LoadingComponent from '../components/LoadingComponent';
+import {showToast} from '../components/ToastFunctions';
 
 const {height, width} = Dimensions.get('window');
 
 function AddApplication({navigation}) {
   const [universityName, setUniversityName] = useState('');
   const [courseName, setCourseName] = useState('');
-  const [degree, setDegree] = useState('');
+  const [degree, setDegree] = useState('MS');
   const [courseFees, setCourseFees] = useState('');
   const [applicationFees, setApplicationFees] = useState('');
-  const [status, setStatus] = useState('');
+  const [status, setStatus] = useState('Applied');
   const [scholarshipPercent, setScholarshipPercent] = useState('0');
-  const [tag, setTag] = useState('');
+  const [tag, setTag] = useState('Safety');
   const [visibility, setVisibility] = useState('Public');
   const [loiModal, setLoiModal] = useState(false);
   const [loi, setLoi] = useState(null);
@@ -37,6 +43,72 @@ function AddApplication({navigation}) {
   const [resume, setResume] = useState(null);
   const tags = ['Safety', 'Reach', 'Target'];
   const visibilities = ['Public', 'Private'];
+  const [error, setError] = useState('');
+  const [showError, setShowError] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const addApplication = () => {
+    if (universityName.length < 4 || courseName.length < 2) {
+      setError('Univeristy Name and Course Name must be valid !');
+      setShowError(true);
+      return;
+    }
+    if (Number(scholarshipPercent) > 100) {
+      setError('SCholarship cannot be greater than 100 % !');
+      setShowError(true);
+      return;
+    }
+    var data = {
+      universityName,
+      courseName,
+      degreeName: degree,
+      status,
+      tag,
+      visibility,
+    };
+    if (courseFees.length > 0) {
+      data.degreeFees = parseInt(courseFees);
+    }
+    if (applicationFees.length > 0) {
+      data.applicationFees = parseInt(applicationFees);
+    }
+    if (scholarshipPercent.length > 0) {
+      data.scholarshipPercentage = parseFloat(scholarshipPercent);
+    }
+    if (resume) {
+      data.resumeLink = resume.link;
+    }
+    if (loi) {
+      data.loiLink = loi.link;
+    }
+    if (tips.length > 0) {
+      data.tips = tips;
+    }
+    setError('');
+    addToDb(data);
+  };
+
+  const addToDb = async data => {
+    setLoading(true);
+    var token = await AsyncStorage.getItem('token');
+    var res = await axios.post(`${url}/application/add`, data, {
+      headers: {
+        authorization: `Bearer ${token}`,
+      },
+    });
+    if (res.data) {
+      setLoading(false);
+      showToast('Application Added', 'success');
+      navigation.goBack();
+    } else {
+      setLoading(false);
+      setError('Some Error Occured while adding your application.');
+      setShowError(true);
+      return;
+    }
+  };
+  const closeErrorModal = () => {
+    setShowError(false);
+  };
   const onDegreeChange = degree => {
     setDegree(degree);
   };
@@ -85,193 +157,213 @@ function AddApplication({navigation}) {
   var color = mode === 'dark' ? 'white' : 'black';
 
   return (
-    <SafeAreaView>
+    <SafeAreaView style={styles.flex1}>
       <LoiPickerModal
         isVisible={loiModal}
         closeModal={closeLoiModal}
         onPick={pickLoi}
+      />
+      <ErrorModal
+        isVisible={showError}
+        opacity={0.9}
+        errorText={error}
+        closeModal={closeErrorModal}
       />
       <ResumePickerModal
         isVisible={resumeModal}
         closeModal={closeResumeModal}
         onPick={pickResume}
       />
-      <ScrollView style={styles.container}>
-        <Sae
-          label={'University Name'}
-          iconClass={FontAwesomeIcon}
-          onChangeText={val => setUniversityName(val)}
-          iconName={'pencil'}
-          iconColor={buttonBgColor}
-          inputPadding={18}
-          labelHeight={25}
-          labelStyle={[styles.textColor(color)]}
-          inputStyle={styles.textInputStyle}
-          borderHeight={1}
-          multiline={false}
-          autoCapitalize={'words'}
-          autoCorrect={false}
-        />
-        <View style={styles.marginSmall}></View>
-        <Sae
-          label={'Course Name'}
-          iconClass={FontAwesomeIcon}
-          onChangeText={val => setCourseName(val)}
-          iconName={'university'}
-          iconColor={buttonBgColor}
-          inputPadding={18}
-          labelHeight={25}
-          labelStyle={[styles.textColor(color)]}
-          inputStyle={styles.textInputStyle2}
-          borderHeight={1}
-          multiline={false}
-          autoCapitalize={'words'}
-          autoCorrect={false}
-        />
-        <View
-          style={[
-            styles.flexDirectionRow,
-            styles.marginBig,
-            {marginLeft: -15},
-          ]}>
-          <Kohana
-            style={{backgroundColor: 'transparent', width: width * 0.4}}
-            label={'Application Fees'}
-            onChangeText={val => setApplicationFees(val)}
-            keyboardType="number-pad"
+      {loading ? (
+        <LoadingComponent displayText={'Adding Your Application !'} />
+      ) : (
+        <ScrollView style={styles.container}>
+          <Sae
+            label={'University Name'}
             iconClass={FontAwesomeIcon}
-            iconName={'dollar'}
+            onChangeText={val => setUniversityName(val)}
+            iconName={'pencil'}
             iconColor={buttonBgColor}
-            labelStyle={{color: color, fontFamily: 'OpenSans-Regular'}}
-            inputStyle={{color: buttonBgColor, fontFamily: 'OpenSans-Regular'}}
-            useNativeDriver
+            inputPadding={18}
+            labelHeight={25}
+            labelStyle={[styles.textColor(color)]}
+            inputStyle={styles.textInputStyle}
+            borderHeight={1}
+            multiline={false}
+            autoCapitalize={'words'}
+            autoCorrect={false}
           />
-          <Kohana
-            style={{backgroundColor: 'transparent', width: width * 0.4}}
-            label={'Course Fees'}
-            onChangeText={val => setCourseFees(val)}
+          <View style={styles.marginSmall}></View>
+          <Sae
+            label={'Course Name'}
             iconClass={FontAwesomeIcon}
-            keyboardType="number-pad"
-            iconName={'dollar'}
+            onChangeText={val => setCourseName(val)}
+            iconName={'university'}
             iconColor={buttonBgColor}
-            labelStyle={{color: color, fontFamily: 'OpenSans-Regular'}}
-            inputStyle={{color: buttonBgColor, fontFamily: 'OpenSans-Regular'}}
-            useNativeDriver
+            inputPadding={18}
+            labelHeight={25}
+            labelStyle={[styles.textColor(color)]}
+            inputStyle={styles.textInputStyle2}
+            borderHeight={1}
+            multiline={false}
+            autoCapitalize={'words'}
+            autoCorrect={false}
           />
-        </View>
-        <View style={[styles.flexDirectionRow, styles.marginSmall]}>
-          <CustomPicker
-            options={degrees}
-            prompt="Select Degree"
-            selectedValue={degree}
-            width={width * 0.42}
-            onValueChange={onDegreeChange}
-          />
-          <View style={styles.flex1}></View>
-          <CustomPicker
-            options={statuses}
-            prompt="Status"
-            selectedValue={status}
-            width={width * 0.42}
-            onValueChange={onStatusChange}
-          />
-        </View>
-        {status === 'Accepted' && (
-          <View style={styles.marginBig}>
-            <Hoshi
-              label={'Scholarship Percentage'}
-              // this is used as active border color
-              borderColor={buttonBgColor}
-              value={scholarshipPercent}
-              onChangeText={val => setScholarshipPercent(val)}
+          <View
+            style={[
+              styles.flexDirectionRow,
+              styles.marginBig,
+              {marginLeft: -15},
+            ]}>
+            <Kohana
+              style={{backgroundColor: 'transparent', width: width * 0.4}}
+              label={'Application Fees'}
+              onChangeText={val => setApplicationFees(val)}
+              keyboardType="number-pad"
+              iconClass={FontAwesomeIcon}
+              iconName={'dollar'}
+              iconColor={buttonBgColor}
               labelStyle={{color: color, fontFamily: 'OpenSans-Regular'}}
               inputStyle={{
                 color: buttonBgColor,
                 fontFamily: 'OpenSans-Regular',
               }}
-              borderHeight={1}
-              inputPadding={15}
-              backgroundColor={'transparent'}
+              useNativeDriver
+            />
+            <Kohana
+              style={{backgroundColor: 'transparent', width: width * 0.4}}
+              label={'Course Fees'}
+              onChangeText={val => setCourseFees(val)}
+              iconClass={FontAwesomeIcon}
+              keyboardType="number-pad"
+              iconName={'dollar'}
+              iconColor={buttonBgColor}
+              labelStyle={{color: color, fontFamily: 'OpenSans-Regular'}}
+              inputStyle={{
+                color: buttonBgColor,
+                fontFamily: 'OpenSans-Regular',
+              }}
+              useNativeDriver
             />
           </View>
-        )}
-        <View style={[styles.flexDirectionRow, styles.marginSmall]}>
-          <CustomPicker
-            options={tags}
-            prompt="Select Tag"
-            selectedValue={tag}
-            width={width * 0.42}
-            onValueChange={onTagChange}
-          />
-          <View style={styles.flex1}></View>
-          <CustomPicker
-            options={visibilities}
-            prompt="Visibility"
-            selectedValue={visibility}
-            width={width * 0.42}
-            onValueChange={onVisibilityChange}
-          />
-        </View>
-        {visibility === 'Public' && (
-          <View style={styles.marginSmall}>
-            <TextInput
-              style={styles.score}
-              value={tips}
-              onChangeText={val => setTips(val)}
-              placeholder="Any Tips / Advice For Viewers"
-              numberOfLines={3}
-              multiline
+          <View style={[styles.flexDirectionRow, styles.marginSmall]}>
+            <CustomPicker
+              options={degrees}
+              prompt="Select Degree"
+              selectedValue={degree}
+              width={width * 0.42}
+              onValueChange={onDegreeChange}
+            />
+            <View style={styles.flex1}></View>
+            <CustomPicker
+              options={statuses}
+              prompt="Status"
+              selectedValue={status}
+              width={width * 0.42}
+              onValueChange={onStatusChange}
             />
           </View>
-        )}
-        <View style={styles.marginBig}>
-          {loi ? (
-            <View>
-              <TouchableOpacity style={styles.loiStyle} onPress={openLoiModal}>
-                <Text style={styles.textStyle}>LOI Used : {loi.name}</Text>
-              </TouchableOpacity>
+          {status === 'Accepted' && (
+            <View style={styles.marginBig}>
+              <Hoshi
+                label={'Scholarship Percentage'}
+                // this is used as active border color
+                borderColor={buttonBgColor}
+                value={scholarshipPercent}
+                onChangeText={val => setScholarshipPercent(val)}
+                labelStyle={{color: color, fontFamily: 'OpenSans-Regular'}}
+                inputStyle={{
+                  color: buttonBgColor,
+                  fontFamily: 'OpenSans-Regular',
+                }}
+                borderHeight={1}
+                inputPadding={15}
+                backgroundColor={'transparent'}
+              />
             </View>
-          ) : (
-            <CoolButton
-              marginHorizontal={15}
-              marginVertical={10}
-              fontSize={18}
-              borderRadius={11}
-              title="LOI used for this College"
-              opacity={0.8}
-              onPress={openLoiModal}
-            />
           )}
-          {resume ? (
-            <View>
-              <TouchableOpacity
-                style={styles.loiStyle}
-                onPress={openResumeModal}>
-                <Text style={styles.textStyle}>
-                  Resume Used : {resume.name}
-                </Text>
-              </TouchableOpacity>
+          <View style={[styles.flexDirectionRow, styles.marginSmall]}>
+            <CustomPicker
+              options={tags}
+              prompt="Select Tag"
+              selectedValue={tag}
+              width={width * 0.42}
+              onValueChange={onTagChange}
+            />
+            <View style={styles.flex1}></View>
+            <CustomPicker
+              options={visibilities}
+              prompt="Visibility"
+              selectedValue={visibility}
+              width={width * 0.42}
+              onValueChange={onVisibilityChange}
+            />
+          </View>
+          {visibility === 'Public' && (
+            <View style={styles.marginSmall}>
+              <TextInput
+                style={styles.score}
+                value={tips}
+                onChangeText={val => setTips(val)}
+                placeholder="Any Tips / Advice For Viewers"
+                numberOfLines={3}
+                multiline
+              />
             </View>
-          ) : (
-            <CoolButton
-              marginHorizontal={15}
-              marginVertical={10}
-              fontSize={18}
-              borderRadius={11}
-              title="Resume used for this College"
-              opacity={0.8}
-              onPress={openResumeModal}
-            />
           )}
-        </View>
-        <View style={styles.marginBig}>
-          <TouchableOpacity style={styles.buttonStyle}>
-            <Text style={[styles.textInputStyle, styles.textColor(color)]}>
-              Add Application
-            </Text>
-          </TouchableOpacity>
-        </View>
-      </ScrollView>
+          <View style={styles.marginBig}>
+            {loi ? (
+              <View>
+                <TouchableOpacity
+                  style={styles.loiStyle}
+                  onPress={openLoiModal}>
+                  <Text style={styles.textStyle}>LOI Used : {loi.name}</Text>
+                </TouchableOpacity>
+              </View>
+            ) : (
+              <CoolButton
+                marginHorizontal={15}
+                marginVertical={10}
+                fontSize={18}
+                borderRadius={11}
+                title="LOI used for this College"
+                opacity={0.8}
+                onPress={openLoiModal}
+              />
+            )}
+            {resume ? (
+              <View>
+                <TouchableOpacity
+                  style={styles.loiStyle}
+                  onPress={openResumeModal}>
+                  <Text style={styles.textStyle}>
+                    Resume Used : {resume.name}
+                  </Text>
+                </TouchableOpacity>
+              </View>
+            ) : (
+              <CoolButton
+                marginHorizontal={15}
+                marginVertical={10}
+                fontSize={18}
+                borderRadius={11}
+                title="Resume used for this College"
+                opacity={0.8}
+                onPress={openResumeModal}
+              />
+            )}
+          </View>
+          <View style={styles.marginBig}>
+            <TouchableOpacity
+              onPress={addApplication}
+              style={styles.buttonStyle}>
+              <Text style={[styles.textInputStyle, styles.textColor(color)]}>
+                Add Application
+              </Text>
+            </TouchableOpacity>
+          </View>
+        </ScrollView>
+      )}
     </SafeAreaView>
   );
 }
@@ -284,7 +376,7 @@ const styles = StyleSheet.create({
     paddingVertical: 9,
     alignItems: 'center',
     backgroundColor: buttonBgColor,
-    borderRadius:15,
+    borderRadius: 15,
   },
   courseNameStyle: {
     backgroundColor: 'blue',

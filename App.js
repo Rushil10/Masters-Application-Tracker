@@ -34,6 +34,7 @@ import AddApplication from './src/screens/AddApplication';
 import DummyScreen from './src/screens/DummyScreen';
 import AllLois from './src/screens/AllLois';
 import AddLoi from './src/screens/AddLoi';
+import Toast from 'react-native-toast-message';
 
 const Stack = createNativeStackNavigator();
 
@@ -114,25 +115,28 @@ function App() {
   }, []);
 
   return (
-    <Provider store={store}>
-      <NavigationContainer
-        theme={scheme === 'dark' ? MyDarkTheme : DefaultTheme}>
-        <Stack.Navigator
-          screenOptions={{
-            headerShown: false,
-          }}>
-          <Stack.Screen name="AllTabs" component={MyTabs} />
-          <Stack.Screen name="Login" component={LoginScreen} />
-          <Stack.Screen name="MyScores" component={MyScores} />
-          <Stack.Screen name="Resumes" component={AllResumes} />
-          <Stack.Screen name="AddResume" component={AddResume} />
-          <Stack.Screen name="Lois" component={AllLois} />
-          <Stack.Screen name="AddLoi" component={AddLoi} />
-          <Stack.Screen name="PdfDisplay" component={PDFExample} />
-          <Stack.Screen name="AddApplication" component={AddApplication} />
-        </Stack.Navigator>
-      </NavigationContainer>
-    </Provider>
+    <>
+      <Provider store={store}>
+        <NavigationContainer
+          theme={scheme === 'dark' ? MyDarkTheme : DefaultTheme}>
+          <Stack.Navigator
+            screenOptions={{
+              headerShown: false,
+            }}>
+            <Stack.Screen name="AllTabs" component={MyTabs} />
+            <Stack.Screen name="Login" component={LoginScreen} />
+            <Stack.Screen name="MyScores" component={MyScores} />
+            <Stack.Screen name="Resumes" component={AllResumes} />
+            <Stack.Screen name="AddResume" component={AddResume} />
+            <Stack.Screen name="Lois" component={AllLois} />
+            <Stack.Screen name="AddLoi" component={AddLoi} />
+            <Stack.Screen name="PdfDisplay" component={PDFExample} />
+            <Stack.Screen name="AddApplication" component={AddApplication} />
+          </Stack.Navigator>
+        </NavigationContainer>
+      </Provider>
+      <Toast />
+    </>
   );
 }
 
