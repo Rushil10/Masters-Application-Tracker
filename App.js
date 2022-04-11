@@ -80,17 +80,6 @@ function MyTabs() {
         name="Profile"
         component={Profile}
       />
-      {/* <Tab.Screen
-        options={{
-          tabBarLabel: 'Dummy',
-          headerShown: false,
-          tabBarIcon: ({color, size}) => (
-            <Icon2 name="profile" color={color} size={27} />
-          ),
-        }}
-        name="Dummt"
-        component={DummyScreen}
-      /> */}
     </Tab.Navigator>
   );
 }

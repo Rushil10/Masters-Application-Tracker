@@ -24,6 +24,8 @@ import axios from 'axios';
 import url from '../server/api';
 import LoadingComponent from '../components/LoadingComponent';
 import {showToast} from '../components/ToastFunctions';
+import store from '../redux/store';
+import {getApplicationsOfUser} from '../redux/actions/applicationsActions';
 
 const {height, width} = Dimensions.get('window');
 
@@ -96,6 +98,7 @@ function AddApplication({navigation}) {
       },
     });
     if (res.data) {
+      store.dispatch(getApplicationsOfUser());
       setLoading(false);
       showToast('Application Added', 'success');
       navigation.goBack();
