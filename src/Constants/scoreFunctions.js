@@ -1,3 +1,5 @@
+import {reachColor, safetyColor, targetColor} from '../styles/ThemeStyles';
+
 export const getObject = (field, score) => {
   var obj = {};
   if (field === 'GRE') {
@@ -16,4 +18,24 @@ export const getObject = (field, score) => {
     obj.ielts_score = score;
   }
   return obj;
+};
+
+export const tagColor = tag => {
+  if (tag === 'Safety') {
+    return safetyColor;
+  } else if (tag === 'Reach') {
+    return reachColor;
+  } else {
+    return targetColor;
+  }
+};
+
+export const applicationCardEmoji = status => {
+  if (status === 'Accepted') {
+    return '🎉';
+  } else if (status === 'Applied') {
+    return '🤞';
+  } else {
+    return '';
+  }
 };

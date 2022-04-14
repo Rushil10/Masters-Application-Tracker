@@ -20,6 +20,12 @@ export const blackText = {
 
 export const buttonBgColor = '#00AEAE';
 
+export const reachColor = 'gold';
+
+export const targetColor = 'orange';
+
+export const safetyColor = 'yellow';
+
 export const dodgerblue = '#1E90FF';
 
 export const coolButtonBgColor = opacity => `rgba(30,144,255,${opacity})`;

@@ -18,6 +18,7 @@ import getPath from '@flyerhq/react-native-android-uri-path';
 import ErrorModal from '../components/Modals/ErrorModal';
 import store from '../redux/store';
 import {getLoiOfUser} from '../redux/actions/loiActions';
+import Header from '../components/Header';
 
 function AddLoi({navigation}) {
   const [fileData, setFileData] = useState(null);
@@ -105,6 +106,7 @@ function AddLoi({navigation}) {
 
   return (
     <SafeAreaView style={styles.flex1}>
+      <Header title="Add LOI" />
       <ErrorModal
         errorText={errorText}
         closeModal={closeModal}

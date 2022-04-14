@@ -3,18 +3,40 @@ import {Dimensions, SafeAreaView, StyleSheet, Text, View} from 'react-native';
 import {useSelector} from 'react-redux';
 import AvatarImage from '../components/AvatarImage';
 import CoolButton from '../components/CoolButton';
+import { buttonBgColor } from '../styles/ThemeStyles';
 
 const {height, width} = Dimensions.get('window');
 
 function Profile({navigation}) {
   var student = useSelector(state => state.student);
+  var studentApplications = useSelector(state => state.application);
   const [signedIn, setSignedIn] = useState(false);
+
+  const formatToCurrency = amount => {
+    return '$' + amount.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,');
+  };
 
   useEffect(() => {
     if (student.signedIn) {
       setSignedIn(true);
     }
   }, [student.signedIn]);
+
+  const [totalApplications, setTotalApplications] = useState(0);
+  const [applicationSpent, setTotalSpent] = useState(0);
+
+  const getData = () => {
+    var spent = 0;
+    setTotalApplications(studentApplications.applications.length);
+    studentApplications.applications.map(application => {
+      spent = spent + application.applicationFees;
+    });
+    setTotalSpent(spent);
+  };
+
+  useEffect(() => {
+    getData();
+  }, [studentApplications.applications]);
 
   return (
     <SafeAreaView style={styles.flex1}>
@@ -26,6 +48,17 @@ function Profile({navigation}) {
               {student.data.name}
             </Text>
             <Text style={[styles.email]}>{student.data.email}</Text>
+          </View>
+          <View style={{marginHorizontal: 20, marginTop: 15}}>
+            <Text style={styles.textStyle}>
+              Total Applications : <Text style={{color:buttonBgColor}}>{totalApplications}</Text>
+            </Text>
+            <Text style={styles.textStyle}>
+              Total Application Spend :{' '}
+              <Text style={{color:buttonBgColor}}>
+                {formatToCurrency(applicationSpent)}
+              </Text>
+            </Text>
           </View>
           <View style={[styles.largeMarginTop]}>
             <CoolButton
@@ -108,6 +141,19 @@ function Profile({navigation}) {
 const styles = StyleSheet.create({
   flex1: {
     flex: 1,
+  },
+  greenColor: {
+    color: '#118c4f',
+  },
+  container2: {
+    marginHorizontal: 15,
+    alignItems: 'flex-start',
+    textAlign: 'left',
+  },
+  textStyle: {
+    fontSize: 18,
+    textAlign: 'left',
+    fontFamily: 'OpenSans-Medium',
   },
   loginText: {
     textAlign: 'center',

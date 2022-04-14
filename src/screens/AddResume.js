@@ -19,6 +19,7 @@ import {useSelector} from 'react-redux';
 import ErrorModal from '../components/Modals/ErrorModal';
 import store from '../redux/store';
 import {getResumeOfUser} from '../redux/actions/resumeActions';
+import Header from '../components/Header';
 
 function AddResume({navigation}) {
   const [fileData, setFileData] = useState(null);
@@ -106,6 +107,7 @@ function AddResume({navigation}) {
 
   return (
     <SafeAreaView style={styles.flex1}>
+      <Header title="Add Resume" />
       <ErrorModal
         errorText={errorText}
         closeModal={closeModal}

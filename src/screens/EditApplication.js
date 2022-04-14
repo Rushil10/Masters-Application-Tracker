@@ -30,20 +30,33 @@ import Header from '../components/Header';
 
 const {height, width} = Dimensions.get('window');
 
-function AddApplication({navigation}) {
-  const [universityName, setUniversityName] = useState('');
-  const [courseName, setCourseName] = useState('');
-  const [degree, setDegree] = useState('MS');
-  const [courseFees, setCourseFees] = useState('');
-  const [applicationFees, setApplicationFees] = useState('');
-  const [status, setStatus] = useState('Applied');
-  const [scholarshipPercent, setScholarshipPercent] = useState('0');
-  const [tag, setTag] = useState('Safety');
-  const [visibility, setVisibility] = useState('Public');
+function EditApplication({navigation, route}) {
+  var details = route.params.application;
+  const [universityName, setUniversityName] = useState(details.universityName);
+  const [courseName, setCourseName] = useState(details.courseName);
+  const [degree, setDegree] = useState(details.degreeName);
+  const [courseFees, setCourseFees] = useState(
+    details.degreeFees ? details.degreeFees.toString() : '',
+  );
+  const [applicationFees, setApplicationFees] = useState(
+    details.applicationFees ? details.applicationFees.toString() : '',
+  );
+  const [status, setStatus] = useState(details.status);
+  const [scholarshipPercent, setScholarshipPercent] = useState(
+    details.scholarshipPercentage
+      ? details.scholarshipPercentage.toString()
+      : '0',
+  );
+  const [tag, setTag] = useState(details.tag);
+  const [visibility, setVisibility] = useState(details.visibility);
   const [loiModal, setLoiModal] = useState(false);
-  const [loi, setLoi] = useState(null);
+  const [loi, setLoi] = useState(
+    details.loiLink ? {name: 'Selected LOI'} : null,
+  );
   const [resumeModal, setResumeModal] = useState(false);
-  const [resume, setResume] = useState(null);
+  const [resume, setResume] = useState(
+    details.resumeLink ? {name: 'Selected Resume'} : null,
+  );
   const tags = ['Safety', 'Reach', 'Target'];
   const visibilities = ['Public', 'Private'];
   const [error, setError] = useState('');
@@ -67,6 +80,7 @@ function AddApplication({navigation}) {
       status,
       tag,
       visibility,
+      applicationId: details._id,
     };
     if (courseFees.length > 0) {
       data.degreeFees = parseInt(courseFees);
@@ -93,7 +107,7 @@ function AddApplication({navigation}) {
   const addToDb = async data => {
     setLoading(true);
     var token = await AsyncStorage.getItem('token');
-    var res = await axios.post(`${url}/application/add`, data, {
+    var res = await axios.post(`${url}/application/update`, data, {
       headers: {
         authorization: `Bearer ${token}`,
       },
@@ -101,11 +115,11 @@ function AddApplication({navigation}) {
     if (res.data) {
       store.dispatch(getApplicationsOfUser());
       setLoading(false);
-      showToast('Application Added', 'success');
+      showToast('Application Updated', 'success');
       navigation.goBack();
     } else {
       setLoading(false);
-      setError('Some Error Occured while adding your application.');
+      setError('Some Error Occured while updating your application.');
       setShowError(true);
       return;
     }
@@ -142,7 +156,7 @@ function AddApplication({navigation}) {
   const onVisibilityChange = visibility => {
     setVisibility(visibility);
   };
-  const [tips, setTips] = useState('');
+  const [tips, setTips] = useState(details.tips ? details.tips : '');
   const degrees = ['MS', 'MBA', 'MTech', 'ME'];
   const statuses = ['Applied', 'Rejected', 'Accepted'];
 
@@ -162,7 +176,7 @@ function AddApplication({navigation}) {
 
   return (
     <SafeAreaView style={styles.flex1}>
-      <Header title="New Application" />
+      <Header title="Edit Application" />
       <LoiPickerModal
         isVisible={loiModal}
         closeModal={closeLoiModal}
@@ -180,12 +194,13 @@ function AddApplication({navigation}) {
         onPick={pickResume}
       />
       {loading ? (
-        <LoadingComponent displayText={'Adding Your Application !'} />
+        <LoadingComponent displayText={'Updating Your Application !'} />
       ) : (
         <ScrollView
           showsVerticalScrollIndicator={false}
           style={styles.container}>
           <Sae
+            value={universityName}
             label={'University Name'}
             iconClass={FontAwesomeIcon}
             onChangeText={val => setUniversityName(val)}
@@ -202,6 +217,7 @@ function AddApplication({navigation}) {
           />
           <View style={styles.marginSmall}></View>
           <Sae
+            value={courseName}
             label={'Course Name'}
             iconClass={FontAwesomeIcon}
             onChangeText={val => setCourseName(val)}
@@ -223,6 +239,7 @@ function AddApplication({navigation}) {
               {marginLeft: -15},
             ]}>
             <Kohana
+              value={applicationFees}
               style={{backgroundColor: 'transparent', width: width * 0.4}}
               label={'Application Fees'}
               onChangeText={val => setApplicationFees(val)}
@@ -238,6 +255,7 @@ function AddApplication({navigation}) {
               useNativeDriver
             />
             <Kohana
+              value={courseFees}
               style={{backgroundColor: 'transparent', width: width * 0.4}}
               label={'Course Fees'}
               onChangeText={val => setCourseFees(val)}
@@ -365,7 +383,7 @@ function AddApplication({navigation}) {
               onPress={addApplication}
               style={styles.buttonStyle}>
               <Text style={[styles.textInputStyle, styles.textColor(color)]}>
-                Add Application
+                SAVE
               </Text>
             </TouchableOpacity>
           </View>
@@ -450,4 +468,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default AddApplication;
+export default EditApplication;

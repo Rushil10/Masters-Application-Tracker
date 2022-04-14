@@ -35,6 +35,8 @@ import DummyScreen from './src/screens/DummyScreen';
 import AllLois from './src/screens/AllLois';
 import AddLoi from './src/screens/AddLoi';
 import Toast from 'react-native-toast-message';
+import EditApplication from './src/screens/EditApplication';
+import Analytics from './src/screens/Analytics';
 
 const Stack = createNativeStackNavigator();
 
@@ -51,6 +53,7 @@ function MyTabs() {
       }}>
       <Tab.Screen
         options={{
+          headerShown: false,
           tabBarLabel: 'Applications',
           tabBarIcon: ({color, size}) => (
             <Ionicons name="ios-school-outline" color={color} size={34} />
@@ -61,6 +64,17 @@ function MyTabs() {
       />
       <Tab.Screen
         options={{
+          tabBarLabel: 'Analytics',
+          headerShown: false,
+          tabBarIcon: ({color, size}) => (
+            <Ionicons name="analytics" color={color} size={35} />
+          ),
+        }}
+        name="Analytics"
+        component={Analytics}
+      />
+      {/* <Tab.Screen
+        options={{
           tabBarLabel: 'Search',
           tabBarIcon: ({color, size}) => (
             <Icon name="search" color={color} size={35} />
@@ -68,7 +82,7 @@ function MyTabs() {
         }}
         name="Search"
         component={SearchStudents}
-      />
+      /> */}
       <Tab.Screen
         options={{
           tabBarLabel: 'Profile',
@@ -107,7 +121,9 @@ function App() {
     <>
       <Provider store={store}>
         <NavigationContainer
-          theme={scheme === 'dark' ? MyDarkTheme : DefaultTheme}>
+          theme={scheme === 'dark' ? MyDarkTheme : DefaultTheme}
+          //theme={MyDarkTheme}
+        >
           <Stack.Navigator
             screenOptions={{
               headerShown: false,
@@ -121,6 +137,7 @@ function App() {
             <Stack.Screen name="AddLoi" component={AddLoi} />
             <Stack.Screen name="PdfDisplay" component={PDFExample} />
             <Stack.Screen name="AddApplication" component={AddApplication} />
+            <Stack.Screen name="EditApplication" component={EditApplication} />
           </Stack.Navigator>
         </NavigationContainer>
       </Provider>

@@ -2,6 +2,7 @@ import React, {useEffect, useState} from 'react';
 import {SafeAreaView, Text, View, StyleSheet, FlatList} from 'react-native';
 import {useSelector} from 'react-redux';
 import AddApplicationButton from '../components/AddApplicationButton';
+import Header from '../components/Header';
 import LoadingComponent from '../components/LoadingComponent';
 import NoData from '../components/NoData';
 import ResumeCard from '../components/ResumeCard';
@@ -34,6 +35,7 @@ function AllLois({navigation}) {
 
   return (
     <SafeAreaView style={{flex: 1}}>
+      <Header title="Letter Of Intents" />
       {loading ? (
         <LoadingComponent displayText={'Loading Letter Of Intents'} />
       ) : lois.length == 0 ? (
