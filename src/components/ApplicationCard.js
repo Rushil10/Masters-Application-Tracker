@@ -141,7 +141,7 @@ const styles = StyleSheet.create({
         ? 'green'
         : status === 'Applied'
         ? dodgerblue
-        : 'red',
+        : '#ff4c4c',
   }),
   infotext: {
     fontSize: 14,
