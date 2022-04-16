@@ -1,6 +1,8 @@
 react-native-splash-screen : IOS setup is remaining
 firebase-app setup for ios : Google Login (https://rnfirebase.io/auth/usage)
 fonts for ios 
+https://react-native-admob.github.io/admob/docs/Installation
+Then, update your Info.plist as described in the Google Mobile Ads SDK documentation.
 
 
 FOr Setup Of Sha-1

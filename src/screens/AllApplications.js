@@ -2,6 +2,7 @@ import React, {useEffect, useState} from 'react';
 import {SafeAreaView, Text, View, StyleSheet, FlatList} from 'react-native';
 import {useSelector} from 'react-redux';
 import AddApplicationButton from '../components/AddApplicationButton';
+import BannerAdd from '../components/Ads/BannerAd';
 import ApplicationCard from '../components/ApplicationCard';
 import Header from '../components/Header';
 import LoadingComponent from '../components/LoadingComponent';
@@ -37,6 +38,7 @@ function AllApplications({navigation}) {
   return (
     <SafeAreaView style={{flex: 1}}>
       <Header title={'Applications'} />
+      <BannerAdd />
       {loading ? (
         <LoadingComponent displayText={'Loading All Your Applications'} />
       ) : (

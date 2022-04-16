@@ -55,10 +55,13 @@ function LoginScreen({navigation}) {
       store.dispatch(validateUser(student));
     } catch (error) {
       if (error.code === statusCodes.SIGN_IN_CANCELLED) {
+        console.log(error);
         // user cancelled the login flow
       } else if (error.code === statusCodes.IN_PROGRESS) {
+        console.log(error);
         // operation (e.g. sign in) is in progress already
       } else if (error.code === statusCodes.PLAY_SERVICES_NOT_AVAILABLE) {
+        console.log(error);
         // play services not available or outdated
       } else {
         // some other error happened

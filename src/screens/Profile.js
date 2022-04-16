@@ -1,9 +1,16 @@
 import React, {useState, useEffect} from 'react';
-import {Dimensions, SafeAreaView, StyleSheet, Text, View} from 'react-native';
+import {
+  Dimensions,
+  SafeAreaView,
+  ScrollView,
+  StyleSheet,
+  Text,
+  View,
+} from 'react-native';
 import {useSelector} from 'react-redux';
 import AvatarImage from '../components/AvatarImage';
 import CoolButton from '../components/CoolButton';
-import { buttonBgColor } from '../styles/ThemeStyles';
+import {buttonBgColor} from '../styles/ThemeStyles';
 
 const {height, width} = Dimensions.get('window');
 
@@ -41,7 +48,7 @@ function Profile({navigation}) {
   return (
     <SafeAreaView style={styles.flex1}>
       {signedIn ? (
-        <View style={[styles.flex1, styles.container]}>
+        <ScrollView>
           <View style={styles.alignCenter}>
             <AvatarImage url={student.data.image} width={width * 0.27} />
             <Text style={[styles.name, styles.mediumMarginTop]}>
@@ -51,11 +58,12 @@ function Profile({navigation}) {
           </View>
           <View style={{marginHorizontal: 20, marginTop: 15}}>
             <Text style={styles.textStyle}>
-              Total Applications : <Text style={{color:buttonBgColor}}>{totalApplications}</Text>
+              Total Applications :{' '}
+              <Text style={{color: buttonBgColor}}>{totalApplications}</Text>
             </Text>
             <Text style={styles.textStyle}>
               Total Application Spend :{' '}
-              <Text style={{color:buttonBgColor}}>
+              <Text style={{color: buttonBgColor}}>
                 {formatToCurrency(applicationSpent)}
               </Text>
             </Text>
@@ -116,7 +124,7 @@ function Profile({navigation}) {
               onPress={() => console.log('Pressed')}
             />
           </View>
-        </View>
+        </ScrollView>
       ) : (
         <View style={[styles.flex1, styles.container2]}>
           <Text style={styles.loginText}>
