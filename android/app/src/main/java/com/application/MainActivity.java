@@ -1,4 +1,4 @@
-package com.application;
+package com.universitytracker;
 import android.os.Bundle; // here
 import com.facebook.react.ReactActivity;
 import org.devio.rn.splashscreen.SplashScreen;

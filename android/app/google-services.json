@@ -7,17 +7,17 @@
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:662446869004:android:a8564b5f8432c3bd953c29",
+        "mobilesdk_app_id": "1:662446869004:android:9ceaaa7c2e3f8f0a953c29",
         "android_client_info": {
-          "package_name": "com.application"
+          "package_name": "com.universitytracker"
         }
       },
       "oauth_client": [
         {
-          "client_id": "662446869004-71269fmdjj1p9khnhcnnqn1sr0qb99le.apps.googleusercontent.com",
+          "client_id": "662446869004-ugrebeu96p5ovvpf8vfail92tvo3615v.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
-            "package_name": "com.application",
+            "package_name": "com.universitytracker",
             "certificate_hash": "39c60c541dafdcdc796e967579d981af51987161"
           }
         },
@@ -40,8 +40,7 @@
             }
           ]
         }
-      },
-      "admob_app_id": "ca-app-pub-7992896789862342~3690971995"
+      }
     }
   ],
   "configuration_version": "1"
