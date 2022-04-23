@@ -12,11 +12,15 @@ export const getLoiOfUser = () => async dispatch => {
     },
   });
   if (res.data) {
-    console.log(res.data);
+    //console.log(res.data);
     dispatch({type: LOI_DATA, payload: res.data.lois});
   } else {
     var err = 'ERROR in GETTING LOI';
     dispatch({type: LOI_ERROR, payload: err});
     dispatch({type: LOI_LOADING, payload: false});
   }
+};
+
+export const loiLogout = () => async dispatch => {
+  dispatch({type: LOI_DATA, payload: []});
 };

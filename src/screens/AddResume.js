@@ -7,6 +7,7 @@ import {
   TextInput,
   AsyncStorage,
   ActivityIndicator,
+  TouchableOpacity,
 } from 'react-native';
 import CoolButton from '../components/CoolButton';
 import {buttonBgColor, dodgerblue} from '../styles/ThemeStyles';
@@ -63,7 +64,7 @@ function AddResume({navigation}) {
       name: name,
       link: link,
     };
-    console.log(body);
+    //console.log(body);
     var res = await axios.post(`${url}/resume/add`, body, {
       headers: {
         authorization: `Bearer ${token}`,
@@ -128,6 +129,11 @@ function AddResume({navigation}) {
           opacity={0.8}
           onPress={pickResume}
         />
+        {fileData && (
+          <TouchableOpacity style={styles.loiStyle} onPress={pickResume}>
+            <Text style={styles.textStyle}>{fileData.name}</Text>
+          </TouchableOpacity>
+        )}
         <View style={styles.flex1}></View>
         {!storingInDb && !storeingFile && fileData && (
           <CoolButton
@@ -179,6 +185,17 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     fontFamily: 'OpneSans-Light',
     fontSize: 20,
+  },
+  loiStyle: {
+    borderRadius: 9,
+    borderWidth: 1,
+    paddingHorizontal: 15,
+    paddingVertical: 10,
+    borderColor: dodgerblue,
+  },
+  textStyle: {
+    fontSize: 21,
+    fontFamily: 'OpenSans-Regular',
   },
 });
 

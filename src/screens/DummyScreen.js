@@ -41,7 +41,7 @@ function DummyScreen({navigation}) {
   };
 
   const onEndReached = di => {
-    //console.log(di, 'End ');
+    ////console.log(di, 'End ');
     var lastDate = new Date(data[data.length - 1].date);
     var arr = [];
     for (var i = 1; i <= 12; i++) {
@@ -55,14 +55,14 @@ function DummyScreen({navigation}) {
   };
 
   const handleScroll = event => {
-    //console.log(event);
+    ////console.log(event);
     var scrolled = event.nativeEvent.contentOffset.y;
     var index = parseInt(scrolled / 95);
     var d = new Date(data[index].date);
     var monthName = monthNames[d.getMonth()];
     var year = d.getFullYear();
     setThisMonth(monthName + ' ' + year);
-    //console.log(scrolled, 'Index', index);
+    ////console.log(scrolled, 'Index', index);
   };
 
   useEffect(() => {

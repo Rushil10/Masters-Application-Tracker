@@ -11,12 +11,12 @@ function Rejected({navigation}) {
   var studentApplications = useSelector(state => state.application);
 
   const getApplications = () => {
-    console.log('Updating Rejected Applications');
+    //console.log('Updating Rejected Applications');
     setLoading(true);
     var application = studentApplications.applications.filter(application => {
       return application.status === 'Rejected';
     });
-    console.log(application);
+    //console.log(application);
     setLoading(false);
     setApplications(application);
   };
@@ -25,27 +25,47 @@ function Rejected({navigation}) {
     getApplications();
   }, [studentApplications.applications]);
 
+  useEffect(() => {
+    setLoading(studentApplications.sortLoading);
+  }, [studentApplications.sortLoading]);
+
   return (
     <SafeAreaView style={{flex: 1}}>
       {loading ? (
         <LoadingComponent displayText={'Loading Rejected Applications'} />
       ) : (
         <View style={{flex: 1}}>
-          <FlatList
-            showsVerticalScrollIndicator={false}
-            data={applications}
-            renderItem={({item, index}) => (
-              <ApplicationCard
-                showTag={true}
-                showFees={true}
-                application={item}
-              />
-            )}
-          />
+          {applications.length > 0 ? (
+            <FlatList
+              showsVerticalScrollIndicator={false}
+              data={applications}
+              renderItem={({item, index}) => (
+                <ApplicationCard
+                  showTag={true}
+                  showFees={true}
+                  application={item}
+                />
+              )}
+            />
+          ) : (
+            <View
+              style={{flex: 1, alignItems: 'center', justifyContent: 'center'}}>
+              <Text style={styles.textStyle}>No Rejected Applications</Text>
+            </View>
+          )}
         </View>
       )}
     </SafeAreaView>
   );
 }
+
+const styles = StyleSheet.create({
+  textStyle: {
+    fontSize: 25,
+    fontFamily: 'OpenSans-Regular',
+    marginTop: 15,
+    textAlign: 'center',
+  },
+});
 
 export default Rejected;

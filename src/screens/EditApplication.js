@@ -209,7 +209,7 @@ function EditApplication({navigation, route}) {
             inputPadding={18}
             labelHeight={25}
             labelStyle={[styles.textColor(color)]}
-            inputStyle={styles.textInputStyle}
+            inputStyle={[styles.textInputStyle, {color: color}]}
             borderHeight={1}
             multiline={false}
             autoCapitalize={'words'}
@@ -226,7 +226,7 @@ function EditApplication({navigation, route}) {
             inputPadding={18}
             labelHeight={25}
             labelStyle={[styles.textColor(color)]}
-            inputStyle={styles.textInputStyle2}
+            inputStyle={[styles.textInputStyle2, {color: color}]}
             borderHeight={1}
             multiline={false}
             autoCapitalize={'words'}
@@ -382,9 +382,7 @@ function EditApplication({navigation, route}) {
             <TouchableOpacity
               onPress={addApplication}
               style={styles.buttonStyle}>
-              <Text style={[styles.textInputStyle, styles.textColor(color)]}>
-                SAVE
-              </Text>
+              <Text style={[styles.textInputStyle, {color}]}>SAVE</Text>
             </TouchableOpacity>
           </View>
         </ScrollView>

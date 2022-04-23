@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react';
-import {SafeAreaView, Text, View, StyleSheet, FlatList} from 'react-native';
+import {SafeAreaView, Text, View, StyleSheet, FlatList, Alert} from 'react-native';
 import {useSelector} from 'react-redux';
 import AddApplicationButton from '../components/AddApplicationButton';
 import Header from '../components/Header';
@@ -16,6 +16,21 @@ function AllLois({navigation}) {
   const [loading, setLoading] = useState(false);
 
   const onPressAdd = () => {
+    if (lois.length >= 2) {
+      Alert.alert(
+        'Only 2 Permitted',
+        'Soon you will be able to add more Letters Of Intent, Stay Updated for latest features , Thank you',
+        [
+          {
+            text: 'Cancel',
+            onPress: () => console.log('Cancel Pressed'),
+            style: 'cancel',
+          },
+          {text: 'OK', onPress: () => console.log('OK Pressed')},
+        ],
+      );
+      return;
+    }
     navigation.push('AddLoi');
   };
 

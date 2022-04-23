@@ -31,7 +31,7 @@ function LoginScreen({navigation}) {
   const student = useSelector(state => state.student);
 
   useEffect(() => {
-    console.log(student);
+    //console.log(student);
     setLoading(student.loading);
   }, [student.loading]);
 
@@ -46,7 +46,7 @@ function LoginScreen({navigation}) {
     try {
       await GoogleSignin.hasPlayServices();
       const userInfo = await GoogleSignin.signIn();
-      console.log(userInfo);
+      //console.log(userInfo);
       var student = {
         name: userInfo.user.name,
         image: userInfo.user.photo,
@@ -55,17 +55,17 @@ function LoginScreen({navigation}) {
       store.dispatch(validateUser(student));
     } catch (error) {
       if (error.code === statusCodes.SIGN_IN_CANCELLED) {
-        console.log(error);
+        //console.log(error);
         // user cancelled the login flow
       } else if (error.code === statusCodes.IN_PROGRESS) {
-        console.log(error);
+        //console.log(error);
         // operation (e.g. sign in) is in progress already
       } else if (error.code === statusCodes.PLAY_SERVICES_NOT_AVAILABLE) {
-        console.log(error);
+        //console.log(error);
         // play services not available or outdated
       } else {
         // some other error happened
-        console.log(error);
+        //console.log(error);
       }
     }
   };

@@ -39,3 +39,32 @@ export const applicationCardEmoji = status => {
     return '';
   }
 };
+
+export const sortByFess = async applications => {
+  await applications.sort((a, b) => {
+    return a.degreeFees - b.degreeFees;
+  });
+  return applications;
+};
+
+export const sortByApplicationFees = async applications => {
+  await applications.sort((a, b) => {
+    return a.applicationFees - b.applicationFees;
+  });
+  return applications;
+};
+
+export const sortByDate = async applications => {
+  await applications.sort((a, b) => {
+    return new Date(a.appliedAt) - new Date(b.appliedAt);
+  });
+  return applications;
+};
+
+export const sortByTag = async applications => {
+  var tag = ['Safety', 'Reach', 'Target'];
+  await applications.sort((a, b) => {
+    return tag.indexOf(a.tag) - tag.indexOf(b.tag);
+  });
+  return applications;
+};

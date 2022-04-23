@@ -28,9 +28,8 @@ const styles = StyleSheet.create({
     paddingHorizontal: 15,
     paddingVertical: 11,
     justifyContent: 'center',
-    //borderColor: 'rgba(0,0,0,0.5)',
     backgroundColor: coolButtonBgColor(opacity),
-    borderWidth: 1,
+    borderWidth: 0,
   }),
   textStyle: fontSize => ({
     fontSize,

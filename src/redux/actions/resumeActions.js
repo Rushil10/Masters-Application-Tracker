@@ -13,11 +13,15 @@ export const getResumeOfUser = () => async dispatch => {
     },
   });
   if (res.data) {
-    console.log(res.data);
+    //console.log(res.data);
     dispatch({type: RESUME_DATA, payload: res.data.resumes});
   } else {
     var err = 'ERROR in GETTING RESUME';
     dispatch({type: RESUME_ERROR, payload: err});
     dispatch({type: RESUME_LOADING, payload: false});
   }
+};
+
+export const resumeLogout = () => async dispatch => {
+  dispatch({type: RESUME_DATA, payload: []});
 };

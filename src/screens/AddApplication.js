@@ -194,7 +194,7 @@ function AddApplication({navigation}) {
             inputPadding={18}
             labelHeight={25}
             labelStyle={[styles.textColor(color)]}
-            inputStyle={styles.textInputStyle}
+            inputStyle={[styles.textInputStyle, {color: color}]}
             borderHeight={1}
             multiline={false}
             autoCapitalize={'words'}
@@ -210,7 +210,7 @@ function AddApplication({navigation}) {
             inputPadding={18}
             labelHeight={25}
             labelStyle={[styles.textColor(color)]}
-            inputStyle={styles.textInputStyle2}
+            inputStyle={[styles.textInputStyle2, {color: color}]}
             borderHeight={1}
             multiline={false}
             autoCapitalize={'words'}

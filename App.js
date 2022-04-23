@@ -9,7 +9,7 @@ import {
   useColorScheme,
   View,
 } from 'react-native';
-import {NavigationContainer} from '@react-navigation/native';
+import {NavigationContainer, useTheme} from '@react-navigation/native';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import AllApplications from './src/screens/AllApplications';
 import {DefaultTheme, DarkTheme} from '@react-navigation/native';
@@ -37,19 +37,23 @@ import AddLoi from './src/screens/AddLoi';
 import Toast from 'react-native-toast-message';
 import EditApplication from './src/screens/EditApplication';
 import Analytics from './src/screens/Analytics';
+import DummyScreen2 from './src/screens/DummyScreen2';
+import AllLors from './src/screens/AllLors';
+import AddLor from './src/screens/AddLor';
 
 const Stack = createNativeStackNavigator();
 
 const Tab = createBottomTabNavigator();
 
 function MyTabs() {
+  const theme = useColorScheme();
   return (
     <Tab.Navigator
       screenOptions={{
         tabBarLabelStyle: {fontSize: 11},
         tabBarShowLabel: false,
         tabBarStyle: {borderTopColor: 'grey', height: 55},
-        tabBarInactiveTintColor: 'white',
+        tabBarInactiveTintColor: theme === 'dark' ? 'white' : 'black',
       }}>
       <Tab.Screen
         options={{
@@ -76,12 +80,13 @@ function MyTabs() {
       {/* <Tab.Screen
         options={{
           tabBarLabel: 'Search',
+          headerShown: false,
           tabBarIcon: ({color, size}) => (
             <Icon name="search" color={color} size={35} />
           ),
         }}
         name="Search"
-        component={SearchStudents}
+        component={DummyScreen2}
       /> */}
       <Tab.Screen
         options={{
@@ -121,9 +126,7 @@ function App() {
     <>
       <Provider store={store}>
         <NavigationContainer
-          theme={scheme === 'dark' ? MyDarkTheme : DefaultTheme}
-          //theme={MyDarkTheme}
-        >
+          theme={scheme === 'dark' ? MyDarkTheme : DefaultTheme}>
           <Stack.Navigator
             screenOptions={{
               headerShown: false,
@@ -135,6 +138,8 @@ function App() {
             <Stack.Screen name="AddResume" component={AddResume} />
             <Stack.Screen name="Lois" component={AllLois} />
             <Stack.Screen name="AddLoi" component={AddLoi} />
+            <Stack.Screen name="Lors" component={AllLors} />
+            <Stack.Screen name="AddLor" component={AddLor} />
             <Stack.Screen name="PdfDisplay" component={PDFExample} />
             <Stack.Screen name="AddApplication" component={AddApplication} />
             <Stack.Screen name="EditApplication" component={EditApplication} />

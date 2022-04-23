@@ -2,6 +2,7 @@ import axios from 'axios';
 import url from '../../server/api.js';
 import jwt_decode from 'jwt-decode';
 import {
+  REMOVE_STUDENT,
   SET_LOGIN_ERROR,
   STORE_STUDENT,
   STUDENT_LOADING,
@@ -46,4 +47,8 @@ export const addMyScore = (type, score, obj) => async dispatch => {
     var error = 'Could Not Update Scores !';
     dispatch({type: UPDATE_SCORE_ERROR, payload: error});
   }
+};
+
+export const studentLogout = () => async dispatch => {
+  dispatch({type: REMOVE_STUDENT});
 };

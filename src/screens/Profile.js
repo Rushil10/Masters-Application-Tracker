@@ -1,5 +1,6 @@
 import React, {useState, useEffect} from 'react';
 import {
+  AsyncStorage,
   Dimensions,
   SafeAreaView,
   ScrollView,
@@ -10,6 +11,12 @@ import {
 import {useSelector} from 'react-redux';
 import AvatarImage from '../components/AvatarImage';
 import CoolButton from '../components/CoolButton';
+import {applicationLogout} from '../redux/actions/applicationsActions';
+import {loiLogout} from '../redux/actions/loiActions';
+import {lorLogout} from '../redux/actions/lorActions';
+import {resumeLogout} from '../redux/actions/resumeActions';
+import {studentLogout} from '../redux/actions/studentActions';
+import store from '../redux/store';
 import {buttonBgColor} from '../styles/ThemeStyles';
 
 const {height, width} = Dimensions.get('window');
@@ -24,9 +31,7 @@ function Profile({navigation}) {
   };
 
   useEffect(() => {
-    if (student.signedIn) {
-      setSignedIn(true);
-    }
+    setSignedIn(student.signedIn);
   }, [student.signedIn]);
 
   const [totalApplications, setTotalApplications] = useState(0);
@@ -45,11 +50,21 @@ function Profile({navigation}) {
     getData();
   }, [studentApplications.applications]);
 
+  const onLogout = async () => {
+    await AsyncStorage.removeItem('token');
+    store.dispatch(studentLogout());
+    store.dispatch(applicationLogout());
+    store.dispatch(resumeLogout());
+    store.dispatch(loiLogout());
+    store.dispatch(lorLogout());
+  };
+
   return (
     <SafeAreaView style={styles.flex1}>
       {signedIn ? (
         <ScrollView>
           <View style={styles.alignCenter}>
+            <View style={{height: 25}}></View>
             <AvatarImage url={student.data.image} width={width * 0.27} />
             <Text style={[styles.name, styles.mediumMarginTop]}>
               {student.data.name}
@@ -87,15 +102,15 @@ function Profile({navigation}) {
               opacity={0.8}
               onPress={() => navigation.push('Resumes')}
             />
-            <CoolButton
+            {/* <CoolButton
               marginHorizontal={15}
               marginVertical={10}
               fontSize={18}
               borderRadius={11}
               title="Personal Documents"
               opacity={0.8}
-              onPress={() => console.log('Pressed')}
-            />
+              onPress={() => //console.log('Pressed')}
+            /> */}
             <CoolButton
               marginHorizontal={15}
               marginVertical={10}
@@ -103,7 +118,7 @@ function Profile({navigation}) {
               borderRadius={11}
               title="LOR"
               opacity={0.8}
-              onPress={() => console.log('Pressed')}
+              onPress={() => navigation.push('Lors')}
             />
             <CoolButton
               marginHorizontal={15}
@@ -114,14 +129,23 @@ function Profile({navigation}) {
               opacity={0.8}
               onPress={() => navigation.push('Lois')}
             />
-            <CoolButton
+            {/* <CoolButton
               marginHorizontal={15}
               marginVertical={10}
               fontSize={18}
               borderRadius={11}
               title="ExtraCurricular Certificates"
               opacity={0.8}
-              onPress={() => console.log('Pressed')}
+              onPress={() => //console.log('Pressed')}
+            /> */}
+            <CoolButton
+              marginHorizontal={15}
+              marginVertical={10}
+              fontSize={18}
+              borderRadius={11}
+              title="LOGOUT"
+              opacity={0.8}
+              onPress={onLogout}
             />
           </View>
         </ScrollView>

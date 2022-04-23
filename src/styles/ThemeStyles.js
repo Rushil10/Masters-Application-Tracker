@@ -24,7 +24,7 @@ export const reachColor = 'gold';
 
 export const targetColor = 'orange';
 
-export const safetyColor = 'yellow';
+export const safetyColor = '#800080';
 
 export const dodgerblue = '#1E90FF';
 

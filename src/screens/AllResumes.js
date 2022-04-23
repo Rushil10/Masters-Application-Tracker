@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react';
-import {SafeAreaView, Text, View, StyleSheet, FlatList} from 'react-native';
+import {SafeAreaView, Text, View, StyleSheet, FlatList, Alert} from 'react-native';
 import {useSelector} from 'react-redux';
 import AddApplicationButton from '../components/AddApplicationButton';
 import Header from '../components/Header';
@@ -15,6 +15,21 @@ function AllResumes({navigation}) {
   const [loading, setLoading] = useState(false);
 
   const onPressAdd = () => {
+    if (resumes.length >= 1) {
+      Alert.alert(
+        'Only 1 Permitted',
+        'Soon you will be able to add more resumes, Stay Updated for latest features , Thank you',
+        [
+          {
+            text: 'Cancel',
+            onPress: () => console.log('Cancel Pressed'),
+            style: 'cancel',
+          },
+          {text: 'OK', onPress: () => console.log('OK Pressed')},
+        ],
+      );
+      return;
+    }
     navigation.push('AddResume');
   };
 
