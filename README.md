@@ -15,6 +15,12 @@ Also Future scope would include searching other studnet profile and evaluation o
 ![alt image5](https://play-lh.googleusercontent.com/ingxkezPv--7BFDgSyN6RoZWQujULguk96nspWjHltz7BNpKs7HPjRriA5r6e2pIoGU)
 ![alt image6](https://play-lh.googleusercontent.com/rRSWgld57VOmCPnH6S6jkG-e3KmzpdcDeZNJ3UW54lqCgq1oNP3xBr1XtcKb5ek4syU)
 
+## Features
+* Storing Resumes, LOR, SOP and personal docs
+* Storing application records and status
+* Tracking costs of application process
+* Which LOR and resume used for which application
+
 ## Future Scope
 * Allowing Users to search each other profiles.
 * Recommendation system based on profiles admits and rejects data.
